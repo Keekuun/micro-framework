@@ -68,10 +68,61 @@ const isInOtherIframe = () => location.ancestorOrigins.length > 0
 
 # iframe 设计方案的优缺点
 优点：
-+ 站点隔离和浏览上下文隔离，可以使微应用在运行时**天然隔离**，适合集成三方应用；
-+ **移植性和复用性好**，可以便捷地嵌在不同的主应用中。
++ 非常简单，使用没有任何心智负担
++ **天然隔离**,web应用隔离的非常完美，无论是js、css、dom都完全隔离开来
 
 缺点：
-+ 主应用刷新时， iframe 无法保持 URL 状态（会重新加载 src 对应的初始 URL）； 
-+ 主应用和 iframe 处于不同的浏览上下文，无法使 iframe 中的模态框相对于主应用居中； 
-+ 主应用和 iframe 微应用的数据状态同步问题：持久化数据和通信。
++ 路由状态丢失，刷新一下，iframe的url状态就丢失了
++ dom割裂严重，弹窗只能在iframe内部展示，无法覆盖全局
++ web应用之间通信非常困难
++ 每次打开白屏时间太长，对于SPA 应用来说无法接受
+
+# FQA
++ 关于同域的解决方案 - 子应用与主应用登录态问题
+
+系统代理？
+
++ 主应用通过iframe加载子应用，如果子应用里有`location.href`的跳转，会导致主应用的历史堆栈出现问题
+
+主应用Proxy代理拦截iframe中的location，子应用中操作的location实际上操作的是主应用中的location，这样我们可以在拦截到href赋值时阻止赋值，然后在主应用中调用history.replaceState更新浏览器地址
+
+```js
+// 获取 iframe 对象
+const myFrame = document.getElementById("myFrame");
+// 获取 iframe 内部的 window 对象
+const frameWindow = myFrame.contentWindow;
+
+// 在主应用中创建一个代理对象，拦截子应用中的location对象
+const locationProxy = new Proxy(frameWindow, {
+    set(target, prop, value) {
+        // 阻止赋值操作
+        if (prop === 'href') {
+            // 在这里可以添加你的条件逻辑来判断是否阻止赋值
+            return true; // 阻止赋值
+        }
+        // 其他情况下，正常赋值
+        target[prop] = value;
+        return true;
+    }
+});
+
+// 在主应用中使用代理对象
+// 通过locationProxy来操作子应用中的location对象
+locationProxy.href = 'https://example.com'; // 赋值操作会被拦截
+
+// 在主应用中使用history.replaceState更新浏览器地址
+history.replaceState({}, '', 'https://example.com'); 
+```
+> [wujie: 路由同步机制](https://wujie-micro.github.io/doc/guide/#%E8%B7%AF%E7%94%B1%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6)
+
+> [wujie: 路由同步机制源码](https://github.com/Tencent/wujie/blob/master/packages/wujie-core/src/iframe.ts#L164)
+
++ 采用了 iframe 作为微前端解决方案，模态框居中问题
+
+使用代理方式解决，比如： wujie的方案:
+
+    天然适配弹窗问题
+    
+    document.body的appendChild或者insertBefore会代理直接插入到webcomponent，子应用不用做任何改造
+
+> [wujie:iframe 连接机制和 css 沙箱机制](https://wujie-micro.github.io/doc/guide/#iframe-%E8%BF%9E%E6%8E%A5%E6%9C%BA%E5%88%B6%E5%92%8C-css-%E6%B2%99%E7%AE%B1%E6%9C%BA%E5%88%B6)
