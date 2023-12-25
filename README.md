@@ -1,5 +1,5 @@
 # micro-framework
-微前端-npm方案测试
+微前端-npm方案测试esmodule
 
 # 启动
     # 安装依赖
@@ -53,8 +53,6 @@ NPM 设计仅仅适合集成一些小型微应用，如果微应用的资源过�
 
 # 技巧
 
-+ 判断页面是否在iframe中打开
-+ 
 现代浏览器可以直接在`html`中使用[`import-maps`](https://github.com/WICG/import-maps)
 import-maps 主要用于映射 HTTP 请求路径别名，类似于 Webpack 中的 alias 和 TypeScript 中的 paths 配置
 
