@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Main app</title>
+</head>
+<body>
+<h1>Main app</h1>
+
+<button onclick="javascript:window.open('<%= iframeUrl %>')">在新的标签页打开 iframe 应用</button>
+<br>
+<!-- 同站应用：iframe.html -->
+<iframe src="<%= iframeUrl %>" width="50%" height="300px"></iframe>
+<!-- 跨站应用: https://juejin.cn/ -->
+<iframe src="https://blog.zkkysqs.top" width="50%" height="500px"></iframe>
+</body>
+</html>

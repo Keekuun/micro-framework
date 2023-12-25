@@ -1,0 +1,32 @@
+<!-- iframe.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>同站的 iframe 应用</title>
+
+  <style>
+    h1 {
+        color: red
+    }
+  </style>
+</head>
+<body>
+<h1>同站的 iframe 应用</h1>
+
+<script>
+    if(window.top !== window) {
+        alert('in iframe1')
+    }
+    // 如果希望判断微应用是否被其他应用进行嵌入，可以使用 location.ancestorOrigins.length > 0 ? true : false
+    console.log('location.ancestorOrigins', location.ancestorOrigins)
+
+    if(window.parent !== window) {
+        alert('in iframe2')
+    }
+</script>
+</body>
+</html>
