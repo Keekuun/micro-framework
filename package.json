@@ -1,18 +1,14 @@
 {
-  "name": "micro-framework",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "type": "module",
+  "name": "root",
+  "private": true,
   "scripts": {
-    "start": "node app.js"
+    "bootstrap": "lerna bootstrap"
   },
-  "author": "",
-  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "engineStrict": true,
   "dependencies": {
-    "ejs": "^3.1.8",
-    "express": "^4.18.2",
-    "ip": "^1.1.8",
-    "lodash-es": "^4.17.21"
+    "lerna": "^8.0.1"
   }
 }

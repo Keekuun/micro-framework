@@ -36,6 +36,10 @@ Node.js 的 CommonJS 和 ES Modules。
 
 > 从 JavaScript 标准版本的兼容性 可以发现，想要兼容大部分浏览器，需要将 ES6 或更高标准的 ECMAScript 转换成 ES5 标准，而如果要支持 IE9 及以下版本的浏览器，还需要使用 polyfill (例如 core-js) 来扩展浏览器中缺失的 API（例如 ES3 标准中缺失 Array.prototype.forEach）。如果对上图中的 ECMAScript 标准不了解，可以自行搜索和查看 ES2015 ~ ES2022（ES6 ~ ES13）、ESNext 等。
 
+> [手把手教你从rollup、esbuild、vite、swc、webpack、tsc中选择npm包构建工具](https://juejin.cn/post/7302624942046134312?searchId=20231225201104B72FDB6A51268DC5E4CB#heading-15)
+> [swc与esbuild-将你的构建提速翻倍](https://juejin.cn/post/7236670763272798266?searchId=20231225201104B72FDB6A51268DC5E4CB)
+> [swc: Speedy Web Compiler](https://swc.rs/)
+
 # NPM 设计方案特点
 好处：
 + 微应用可以使用不同的技术栈进行开发；
@@ -53,29 +57,7 @@ NPM 设计仅仅适合集成一些小型微应用，如果微应用的资源过�
 
 # 技巧
 
-+ 判断页面是否在iframe中打开
-+ 
-现代浏览器可以直接在`html`中使用[`import-maps`](https://github.com/WICG/import-maps)
-import-maps 主要用于映射 HTTP 请求路径别名，类似于 Webpack 中的 alias 和 TypeScript 中的 paths 配置
-
-```html
-
-<script type="importmap">
-      {
-        "imports": {
-          "custom_modules/": "/custom_modules/",
-          "lodash/": "/node_modules/lodash-es/"
-        }
-      }
-    
-</script>
-
-<script type="module">
-  // 自定义模块 - add 函数
-  import {add} from "custom_modules/add.js";
-  // 自定义模块 - 防冲撞测试
-  import "custom_modules/conflict.js";
-  // 三方模块 - 按需引入
-  import isNull from "lodash/isNull.js"
-</script>
++ lerna管理多packages
++ vite将项目打包为库
++ vite打包输出.d.ts文件
 ```
