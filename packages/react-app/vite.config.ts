@@ -8,7 +8,7 @@ export default defineConfig(({mode}) => {
     console.log('[vite build:production]')
     return {
       plugins: [
-        react()
+        react(),
       ],
       build: {
         lib: {

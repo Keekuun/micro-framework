@@ -1,5 +1,6 @@
 import { mount, unmount } from "vue-micro-app"
 import React, { useEffect } from "react";
+import "vue-micro-app/dist/style.css"
 // import React from "react";
 
 const containerId = 'vue-app';
