@@ -32,7 +32,7 @@ Node.js 的 CommonJS 和 ES Modules。
 # 构建工具
 应用的构建需要生成 HTML 文件并打包 JS、CSS 以及图片等静态资源，业务组件的构建更多的是打包成应用需要通过模块化方式引入使用的 JavaScript 库。
 
-诸如：webpack、vite、rollup、esbuild等
+诸如：webpack、vite、rollup、esbuild、rspack、swc等
 
 > 从 JavaScript 标准版本的兼容性 可以发现，想要兼容大部分浏览器，需要将 ES6 或更高标准的 ECMAScript 转换成 ES5 标准，而如果要支持 IE9 及以下版本的浏览器，还需要使用 polyfill (例如 core-js) 来扩展浏览器中缺失的 API（例如 ES3 标准中缺失 Array.prototype.forEach）。如果对上图中的 ECMAScript 标准不了解，可以自行搜索和查看 ES2015 ~ ES2022（ES6 ~ ES13）、ESNext 等。
 
