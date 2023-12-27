@@ -57,7 +57,7 @@ NPM 设计仅仅适合集成一些小型微应用，如果微应用的资源过�
 
 # 技巧
 
-+ lerna管理多packages
-+ vite将项目打包为库
-+ vite打包输出.d.ts文件
++ [lerna管理多packages](https://lerna.js.org/docs/getting-started)
++ [vite将项目打包为库](https://vitejs.dev/guide/build.html#library-mode)
++ [vite打包输出.d.ts文件](https://juejin.cn/post/7153139817495134238)
 ```
