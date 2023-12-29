@@ -2,7 +2,12 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap"
+    "instal": "pnpm install",
+    "start": "cd packages/main-app && pnpm dev && cd ..",
+    "build:micro": "pnpm build:react && pnpm build:vue",
+    "build:main": "cd ./packages/main-app && pnpm build && cd ..",
+    "build:react": "cd ./packages/react-app && pnpm build && cd ..",
+    "build:vue": "cd ./packages/vue-app && pnpm build && cd .."
   },
   "engines": {
     "node": ">=18"

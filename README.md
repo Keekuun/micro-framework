@@ -1,17 +1,29 @@
 # micro-framework
-微前端-npm方案测试
+**微前端-npm方案测试**
++ `main-app`: `react + vite + ts`主应用
++ `vue-app`: `vue + vite + ts`子应用
++ `react-app`: `react + vite + ts`子应用
+
 
 # 启动
+```bash
     # 安装依赖
     pnpm install
-    # 进入 public 目录
-    cd public
-    # 安装浏览器 HTTP 请求需要的 node_modules 模块
-    pnpm install
+    # build react-app
+    cd ./packages/react-app
+    pnpm build
     # 回退到根目录
     cd ..
-    # 启动服务
-    pnpm start
+    # build vue-app
+    cd ./packages/vue-app
+    pnpm build
+
+    # 回退到根目录
+    cd ..
+    # 启动mai-app
+    cd ./packages/main-app
+    pnpm dev
+```
 
 
 # 知识点：
