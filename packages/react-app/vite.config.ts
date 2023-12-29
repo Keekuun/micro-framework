@@ -1,5 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
+// issue: https://github.com/vitejs/vite/issues/1579
+import libCss from 'vite-plugin-libcss';
 
 // https://vitejs.dev/config/
 export default defineConfig(({mode}) => {
@@ -9,6 +11,7 @@ export default defineConfig(({mode}) => {
     return {
       plugins: [
         react(),
+        libCss()
       ],
       build: {
         lib: {
