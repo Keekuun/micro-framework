@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start:main": "nodemon main-server.js",
-    "start:micro": "nodemon micro-server.js",
+    "start:main": "nodemon -e * server/main.js",
+    "start:micro": "nodemon -e * server/micro.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

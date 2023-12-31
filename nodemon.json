@@ -1,3 +1,4 @@
 {
-  "watch": ["./public/**/*.*"]
+  "watch": ["server/**", "src/**"],
+  "ext": "js, css, html"
 }

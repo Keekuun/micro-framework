@@ -9,8 +9,8 @@ const { port, host } = config;
 // 打印请求日志
 app.use(morgan("dev"));
 
-app.use(express.static(path.join("public", "micro")));
+app.use(express.static(path.join("src", "micro")));
 
 // 启动 Node 服务
 app.listen(port.micro, host);
-console.log(`server start at http://${host}:${port.main}/`);
+console.log(`server start at http://${host}:${port.micro}/`);

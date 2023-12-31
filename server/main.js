@@ -9,7 +9,7 @@ const { port, host } = config;
 // 打印请求日志
 app.use(morgan("dev"));
 
-app.use(express.static(path.join("public", "main")));
+app.use(express.static(path.join("src", "main")));
 
 app.post("/micro-apps", function (req, res) {
   // 这里可以是管理后台新增菜单后存储到数据库的数据
