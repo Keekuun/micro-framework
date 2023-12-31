@@ -1,0 +1,48 @@
+<!-- public/main/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Main app</title>
+
+  <link rel="stylesheet" href="index.css" />
+  <style>
+      h1 {
+          color: red;
+      }
+  </style>
+</head>
+
+<body>
+<h1>Main app</h1>
+<!-- 主应用的样式会被微应用覆盖 -->
+<h2>Hello，Dynamic Script!2311312</h2>
+<!-- 主导航设计，这里可以根据后端数据动态渲染导航 -->
+<div id="nav"></div>
+<!-- 内容区设计 -->
+<div class="container">
+  <!-- 微应用渲染的插槽 -->
+  <div id="micro-app-slot"></div>
+</div>
+
+<!-- import-maps 主要用于映射 HTTP 请求路径别名，类似于 Webpack 中的 alias 和 TypeScript 中的 paths 配置 -->
+<!-- import-maps:  https://github.com/WICG/import-maps -->
+<script type="importmap">
+  {
+    "imports": {
+      "micro-utils": "/utils.js"
+    }
+  }
+</script>
+
+<!-- 根据路由切换微应用 -->
+<script type="module">
+  import MicroAppManager from 'micro-utils'
+
+  new MicroAppManager();
+</script>
+</body>
+</html>

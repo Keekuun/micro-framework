@@ -1,0 +1,24 @@
+{
+  "name": "micro-framework",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start:main": "nodemon main-server.js",
+    "start:micro": "nodemon micro-server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ip": "^1.1.8",
+    "morgan": "^1.10.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
