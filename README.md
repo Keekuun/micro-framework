@@ -77,7 +77,7 @@ const isInOtherIframe = () => location.ancestorOrigins.length > 0
 + web应用之间通信非常困难
 + 每次打开白屏时间太长，对于SPA 应用来说无法接受
 
-# FQA
+# FAQ
 + 关于同域的解决方案 - 子应用与主应用登录态问题
 
 系统代理？
