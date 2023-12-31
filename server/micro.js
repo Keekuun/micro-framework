@@ -2,7 +2,9 @@
 import express from "express";
 import morgan from "morgan";
 import path from "path";
+
 import config from "./config.js";
+
 const app = express();
 const { port, host } = config;
 

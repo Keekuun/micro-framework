@@ -2,14 +2,29 @@
 import express from "express";
 import path from "path";
 import morgan from "morgan";
+import livereload from "livereload"
+import connectLivereload from "connect-livereload"
+
 import config from "./config.js";
+
+const staticDir = path.join("src", "main")
+const liveReloadServer = livereload.createServer();
+liveReloadServer.watch(staticDir);
+
 const app = express();
 const { port, host } = config;
+liveReloadServer.server.once("connection", () => {
+  setTimeout(() => {
+    liveReloadServer.refresh("/");
+  }, 100);
+});
 
 // 打印请求日志
 app.use(morgan("dev"));
 
-app.use(express.static(path.join("src", "main")));
+app.use(connectLivereload());
+app.use(express.static(staticDir));
+
 
 app.post("/micro-apps", function (req, res) {
   // 这里可以是管理后台新增菜单后存储到数据库的数据

@@ -1,4 +1,4 @@
 {
   "watch": ["server/**", "src/**"],
-  "ext": "js, css, html"
+  "ext": "css, js, html"
 }
