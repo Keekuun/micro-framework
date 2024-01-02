@@ -67,6 +67,13 @@ class UtilsManager {
     $style && $style?.parentNode?.removeChild($style);
   }
 
+  // 测试用
+  removeScript({id, mount}) {
+    const $script = document.querySelector(`[micro-script=${id}]`);
+    $script && $script?.parentNode?.removeChild($script);
+    delete window?.[mount]
+  }
+
   hasLoadScript({id}) {
     const $script = document.querySelector(`[micro-script=${id}]`);
     return !!$script;
@@ -166,6 +173,8 @@ export default class MicroAppManager extends UtilsManager {
   uninstallMicro(microApp) {
     this.removeStyle(microApp);
     window?.[microApp.unmount]?.();
+
+    // this.removeScript(microApp);
   }
   async installMicro(microApp) {
     // 加载 CSS 样式

@@ -7,6 +7,7 @@
   "scripts": {
     "start:main": "nodemon server/main.js",
     "start:micro": "nodemon server/micro.js",
+    "start": "pnpm run \"/^start:.*/\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
