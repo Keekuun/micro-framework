@@ -5,8 +5,7 @@
 ```bash
 pnpm install
 
-pnpm start:main
-pnpm start:micro
+pnpm start
 ```
 # 知识点：
 动态加载`script`方案实现的原理
@@ -41,7 +40,10 @@ function prefetchStatic(href, as) {
 } 
 ```
 
-+ 
++ [`pnpm` 替代 `npm run all`](https://pnpm.io/cli/run#running-multiple-scripts)：
+```bash
+pnpm run "/^start:.*/"
+```
 
 # 方案的优缺点
 动态 Script 的方案相对于 NPM 方案而言，具备如下优势：
