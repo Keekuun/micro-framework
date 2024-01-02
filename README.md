@@ -92,6 +92,6 @@ customElements.define("my-custom-element", MyCustomElement);
 + 兼容性差：对于 IE 浏览器不兼容，需要通过 Polyfill 的方式进行处理
 + 学习难度增加：相对于传统的 Web 开发，需要掌握新的概念和技术
 
-<video src="https://bizsec-auth.alicdn.com/d946ca083b65cd66/0f1bc22fb3e2ea8c/20231113_5c640de243cbabd0_437667499633_mp4_264_hd_unlimit_taobao.mp4?auth_key=1704189324-0-0-41ab8750668064f0a78ba431c3a6d411&biz=video-406f5569f6a3c031&t=213e2d0a17041866245106526e3303&t=213e2d0a17041866245106526e3303&b=video&p=cloudvideo_http_from_v1_800000012" />
+<video src="https://bizsec-auth.alicdn.com/d946ca083b65cd66/0f1bc22fb3e2ea8c/20231113_5c640de243cbabd0_437667499633_mp4_264_hd_unlimit_taobao.mp4?auth_key=1704189324-0-0-41ab8750668064f0a78ba431c3a6d411&biz=video-406f5569f6a3c031&t=213e2d0a17041866245106526e3303&t=213e2d0a17041866245106526e3303&b=video&p=cloudvideo_http_from_v1_800000012" width="500" height="400"/>
 
 <video src="https://bizsec-auth.alicdn.com/d946ca083b65cd66/9d5e180a5a0c245b/20240101_c48370359f979771_444811775245_mp4_264_hd_unlimit_taobao.mp4?auth_key=1704189606-0-0-492e7ff47fdfe8403746ae548affddac&biz=video-79ed889bcd48d891&t=2150423b17041869061863708e3046&t=2150423b17041869061863708e3046&b=video&p=cloudvideo_http_from_v1_800000012" />
