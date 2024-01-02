@@ -172,9 +172,19 @@ export default class MicroAppManager extends UtilsManager {
 
   uninstallMicro(microApp) {
     this.removeStyle(microApp);
-    window?.[microApp.unmount]?.();
 
-    // this.removeScript(microApp);
+    // 动态 Script 方案
+    // window?.[microApp.unmount]?.();
+
+    // Web Components 方案
+    const $webcomponent = document.querySelector(
+        `[micro-id=${microApp.id}]`
+    );
+    // Web Components 方案
+    // 如果已经添加了自定义元素，则隐藏自定义元素
+    if ($webcomponent) {
+      $webcomponent.style.display = "none";
+    }
   }
   async installMicro(microApp) {
     // 加载 CSS 样式
@@ -185,6 +195,29 @@ export default class MicroAppManager extends UtilsManager {
     microApp?.script &&
     !this.hasLoadScript(microApp) &&
     (await this.loadScript(microApp));
-    window?.[microApp.mount]?.("#micro-app-slot");
+
+    // 动态 Script 方案
+    // window?.[microApp.mount]?.("#micro-app-slot");
+
+    // Web Components 方案
+    // 微应用的插槽
+    const $slot = document.getElementById("micro-app-slot");
+    const $webcomponent = document.querySelector(
+        `[micro-id=${microApp.id}]`
+    );
+    // Web Components 方案
+    // 如果没有在 DOM 中添加自定义元素，则先添加处理
+    if (!$webcomponent) {
+      // Web Components 方案
+      // 自定义元素的标签是微应用先定义出来的，然后在服务端的接口里通过 customElement 属性进行约定
+      const $webcomponent = document.createElement(
+          microApp.customElement
+      );
+      $webcomponent.setAttribute("micro-id", microApp.id);
+      $slot.appendChild($webcomponent);
+      // 如果已经存在自定义元素，则进行显示处理
+    } else {
+      $webcomponent.style.display = "block";
+    }
   }
 }
