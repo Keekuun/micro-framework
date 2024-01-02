@@ -1,69 +1,97 @@
 # micro-framework
-微前端-动态 Script 方案
+
+微前端-web components 方案
 
 # 启动
+
 ```bash
 pnpm install
 
 pnpm start
 ```
+
 # 知识点：
-动态加载`script`方案实现的原理
 
-主应用在html渲染之后，通过以下步骤实现：
-+ `fetch`微应用列表数据，**动态**进行微应用的获取和路由创建处理。
-+ 路由切换显示不同的微应用，切换的过程需要**动态加载和执行**对应的js和css资源。
-+ 微应用需对外暴露`mount`和`unmount`全局函数，方便主应用进行加载和卸载处理。
+Web Components 可以理解为浏览器的原生组件，它通过组件化的方式封装微应用，从而实现应用自治。
 
-# 技巧
+方案实现的原理和动态加载`script`相似：
 
-+ 静态资源预加载
-```js
-// 判断是否支持预加载
-function isSupportPrefetch() {
-    const link = document.createElement("link");
-    const relList = link?.relList;
-    return relList && relList.supports && relList.supports("prefetch");
-}
++ 通过请求获取后端的微应用列表数据，动态进行微应用的预获取和导航创建处理
++ 根据导航进行微应用的切换，切换的过程会动态加载并执行 JS 和 CSS
++ JS 执行后会在主应用中添加微应用对应的自定义元素，从而实现微应用的加载
++ 如果已经加载微应用对应的 JS 和 CSS，再次切换只需要对自定义元素进行显示和隐藏操作
++ 微应用自定义元素会根据内部的生命周期函数在被添加和删除 DOM 时进行加载和卸载处理
 
-// 预请求资源，注意此种情况下不会执行 JS
-function prefetchStatic(href, as) {
-    // prefetch 浏览器支持检测
-    if (!this.isSupportPrefetch()) {
-        return;
-    }
-    const $link = document.createElement("link");
-    $link.rel = "prefetch";
-    $link.as = as;
-    $link.href = href;
-    document.head.appendChild($link);
-} 
-```
+> 温馨提示：需要注意 [Web Components 存在浏览器兼容性问题](https://caniuse.com/?search=Web%20Components)
+> ，可以通过 [Polyfill](https://github.com/webcomponents/polyfills/tree/master/packages/webcomponentsjs) 进行浏览器兼容性处理（IE
+> 只能兼容到 11 版本）。
 
-+ [`pnpm` 替代 `npm run all`](https://pnpm.io/cli/run#running-multiple-scripts)：
+# Web Components知识
+
 ```bash
 pnpm run "/^start:.*/"
 ```
 
++ custom element实现：
+
+```js
+// Create a class for the element
+class MyCustomElement extends HTMLElement {
+    static observedAttributes = ["color", "size"];
+
+    constructor() {
+        // Always call super first in constructor
+        super();
+    }
+
+    connectedCallback() {
+        console.log("Custom element added to page.");
+    }
+
+    disconnectedCallback() {
+        console.log("Custom element removed from page.");
+    }
+
+    adoptedCallback() {
+        console.log("Custom element moved to new page.");
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        console.log(`Attribute ${name} has changed.`);
+    }
+}
+
+customElements.define("my-custom-element", MyCustomElement);
+
+```
+
++ custom element注册：
+
+```js
+  customElements.define("my-custom-element", MyCustomElement);
+```
+
++ custom element使用：
+```html
+<my-custom-element>
+  <!-- content of the element -->
+</my-custom-element>
+```
+> [Using custom elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements)
+
 # 方案的优缺点
-动态 Script 的方案相对于 NPM 方案而言，具备如下优势：
-+ 主应用在线上运行时可以**动态增加、删除和更新**（升级或回滚）需要上架的微应用
-+ 微应用可以进行构建时性能优化，包括**代码分割和静态资源分离**处理
-+ 不需要额外对微应用进行库构建配置去适配 NPM 包的模块化加载方式
 
-当然，动态 Script 方案和 NPM 包方案一样，会存在如下问题：
+对比动态 Script 的方案可以发现 Web Components 的优势如下所示：
 
-+ 主应用和各个微应用的**全局变量**会产生属性冲突
-+ 主应用和各个微应用的 **CSS 样式**会产生**冲突**
++ 复用性：不需要对外抛出加载和卸载的全局 API，可复用能力更强
++ 标准化：W3C 的标准，未来能力会得到持续升级（说不定支持了 JS 上下文隔离）
++ 插拔性：可以非常便捷的进行移植和组件替换
 
-# FAQ
-+ 在微应用切换的执行逻辑中，为什么需要删除 CSS 样文件？那为什么不删除 JS 文件呢？删除 JS 文件会有什么副作用吗？假设删除` micro1.js`，那么还能获取` window.micro1_mount` 吗？如果能够获取，浏览器为什么不在删除 JS 的同时进行内存释放处理呢？如果释放，会有什么副作用呢？
+当然使用 Web Components 也会存在一些劣势，例如：
 
-删除css是为了避免不同的微应用之间css冲突
++ 兼容性差：对于 IE 浏览器不兼容，需要通过 Polyfill 的方式进行处理
++ 学习难度增加：相对于传统的 Web 开发，需要掌握新的概念和技术
 
-不删除js是因为不同的微应用命名空间不同，并且都是挂载到window，就算删除了js,window对象上仍然存在对应的微应用方法，仍然可以获取对应的方法。
+<video src="https://bizsec-auth.alicdn.com/d946ca083b65cd66/0f1bc22fb3e2ea8c/20231113_5c640de243cbabd0_437667499633_mp4_264_hd_unlimit_taobao.mp4?auth_key=1704189324-0-0-41ab8750668064f0a78ba431c3a6d411&biz=video-406f5569f6a3c031&t=213e2d0a17041866245106526e3303&t=213e2d0a17041866245106526e3303&b=video&p=cloudvideo_http_from_v1_800000012" />
 
-如果直接删除了js脚本的话，那么在微应用切换的时候，每次都需要重新加载js文件，如果`js bundle`体积很大，加载时间就很久，那么体验是极差的。
-
-+ 如果去除`micro1.js` 和 `micro2.js` 的立即执行匿名函数，在微应用切换时，会发生什么情况呢？
-IIFE 执行的匿名函数可以起到隔绝全局作用域的功能，如果去掉了，很可能产生命名冲突，从而造成程序崩溃。
+<video src="https://bizsec-auth.alicdn.com/d946ca083b65cd66/9d5e180a5a0c245b/20240101_c48370359f979771_444811775245_mp4_264_hd_unlimit_taobao.mp4?auth_key=1704189606-0-0-492e7ff47fdfe8403746ae548affddac&biz=video-79ed889bcd48d891&t=2150423b17041869061863708e3046&t=2150423b17041869061863708e3046&b=video&p=cloudvideo_http_from_v1_800000012" />
