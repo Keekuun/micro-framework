@@ -54,10 +54,25 @@ class MicroApp1Element extends HTMLElement {
     $micro.textContent = "微应用1";
     // 将微应用的内容挂载到当前自定义元素下
     this.appendChild($micro);
+
+    this.getData()
   }
 
   unmount() {
 
+  }
+
+  getData() {
+    // 新增 fetch 请求，用于请求 micro1.js 所在的服务
+    // 需要注意 micro1.js 动态加载在主应用 localhost:4000 下，因此请求是跨域的
+    fetch("http://localhost:3002/cors", {
+      method: "post",
+      credentials: "include"
+    })
+      .then((res) => res.json())
+      .catch((err) => {
+        console.error(err);
+      });
   }
 }
 

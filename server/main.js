@@ -27,6 +27,11 @@ app.use(express.static(staticDir));
 
 
 app.post("/micro-apps", function (req, res) {
+  console.log("main cookies: ", req.cookies);
+
+  // 设置一个响应的 Cookie 数据
+  res.cookie("main-app", true);
+
   // 这里可以是管理后台新增菜单后存储到数据库的数据
   // 从而可以通过管理后台动态配置微应用的菜单
   res.json([
