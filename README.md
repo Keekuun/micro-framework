@@ -10,6 +10,18 @@ pnpm install
 pnpm start
 ```
 
+# 配置
++ 1.host 配置：
+```
+192.168.31.111 micro.com
+192.168.31.111 micro.demo.com
+```
+
++ 2.nginx配置：
+```nginx
+ 
+```
+
 # 知识点：
 
 Web Components 可以理解为浏览器的原生组件，它通过组件化的方式封装微应用，从而实现应用自治。
