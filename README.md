@@ -17,9 +17,67 @@ pnpm start
 192.168.31.111 micro.demo.com
 ```
 
-+ 2.nginx配置：
-```nginx
- 
++ 2.nginx配置代理：
+```nginx configuration
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+    #access_log  logs/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    server {
+#         listen       80;
+#         server_name  localhost;
+
+        # 设置主应用的代理端口为 4001
+        listen       4001;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+#             root   html;
+#             index  index.html index.htm;
+
+           proxy_pass http://192.168.31.111:3001;
+        }
+    }
+}
+```
+
+# windows nginx操作
+```bash
+# 检测nginx配置
+nginx -t
+
+# 启动nginx
+start nginx
+
+# 停止nginx
+nginx -s stop
+
+# 重启Nginx
+nginx -s reload
+
+# 重新打开日志文件
+nginx -s reopen
+
+# 查看Nginx版本
+nginx -v
 ```
 
 # 知识点：
