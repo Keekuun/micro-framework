@@ -65,7 +65,9 @@ class MicroApp1Element extends HTMLElement {
   getData() {
     // 新增 fetch 请求，用于请求 micro1.js 所在的服务
     // 需要注意 micro1.js 动态加载在主应用 localhost:4000 下，因此请求是跨域的
-    fetch("http://localhost:3002/cors", {
+    // fetch("http://localhost:3002/cors", {
+    // fetch("http://192.168.31.111:3002/cors", {
+    fetch("https://jeek123.com:4002/cors", {
       method: "post",
       credentials: "include"
     })

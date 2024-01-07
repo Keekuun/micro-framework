@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  cookie-parser:
+    specifier: ^1.4.6
+    version: 1.4.6
   express:
     specifier: ^4.18.2
     version: 4.18.2
@@ -98,6 +101,31 @@ packages:
   /content-type@1.0.5:
     resolution: {integrity: sha512-nTjqfcBFEipKdXCv4YDQWCfmcLZKm81ldF0pAopTvyrFGVbcR6P/VAAd5G7N+0tTr8QqiU0tFadD6FK4NtJwOA==}
     engines: {node: '>= 0.6'}
+
+  /cookie-parser@1.4.6:
+    resolution: {integrity: sha512-z3IzaNjdwUC2olLIB5/ITd0/setiaFMLYiZJle7xg5Fe9KWAceil7xszYfHHBtDFYLSgJduS2Ty0P1uJdPDJeA==, tarball: https://r2.cnpmjs.org/cookie-parser/-/cookie-parser-1.4.6.tgz}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      cookie: 0.4.1
+      cookie-signature: 1.0.6
+    dev: false
+
+  /cookie-signature@1.0.1:
+    resolution: {integrity: sha512-FMG5ziBzXZ5d4j5obbWOH1X7AtIpsU9ce9mQ+lHo/I1++kzz/isNarOj6T1lBPRspP3mZpuIutc7OVDVcaN1Kg==, tarball: https://r2.cnpmjs.org/cookie-signature/-/cookie-signature-1.0.1.tgz}
+    dev: true
+
+  /cookie-signature@1.0.6:
+    resolution: {integrity: sha512-QADzlaHc8icV8I7vbaJXJwod9HWYp8uCqf1xa4OfNu1T7JVxQIrUgOWtHdNDtPiywmFbiS12VjotIXLrKM3orQ==, tarball: https://r2.cnpmjs.org/cookie-signature/-/cookie-signature-1.0.6.tgz}
+    dev: false
+
+  /cookie@0.0.5:
+    resolution: {integrity: sha512-STLsAHdtBDF5GJiPHc4sdfX5qzri6bcSxdSlW/o4IYJAA5yZxh3ZZsvctsKRNbhpP328sN+A2EjOF9vcW/LhdQ==, tarball: https://r2.cnpmjs.org/cookie/-/cookie-0.0.5.tgz}
+    dev: true
+
+  /cookie@0.4.1:
+    resolution: {integrity: sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA==, tarball: https://r2.cnpmjs.org/cookie/-/cookie-0.4.1.tgz}
+    engines: {node: '>= 0.6'}
+    dev: false
 
   /cookie@0.5.0:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
@@ -465,8 +493,8 @@ packages:
     dependencies:
       buffer-crc32: r2.cnpmjs.org/buffer-crc32@0.2.1
       bytes: r2.cnpmjs.org/bytes@0.2.0
-      cookie: r2.cnpmjs.org/cookie@0.0.5
-      cookie-signature: r2.cnpmjs.org/cookie-signature@1.0.1
+      cookie: 0.0.5
+      cookie-signature: 1.0.1
       debug: 4.3.4(supports-color@5.5.0)
       formidable: r2.cnpmjs.org/formidable@1.0.14
       fresh: r2.cnpmjs.org/fresh@0.1.0
@@ -486,23 +514,11 @@ packages:
       safe-buffer: r2.cnpmjs.org/safe-buffer@5.2.1
     dev: false
 
-  r2.cnpmjs.org/cookie-signature@1.0.1:
-    resolution: {integrity: sha512-FMG5ziBzXZ5d4j5obbWOH1X7AtIpsU9ce9mQ+lHo/I1++kzz/isNarOj6T1lBPRspP3mZpuIutc7OVDVcaN1Kg==, registry: https://r.cnpmjs.org/, tarball: https://r2.cnpmjs.org/cookie-signature/-/cookie-signature-1.0.1.tgz}
-    name: cookie-signature
-    version: 1.0.1
-    dev: true
-
   r2.cnpmjs.org/cookie-signature@1.0.6:
     resolution: {integrity: sha512-QADzlaHc8icV8I7vbaJXJwod9HWYp8uCqf1xa4OfNu1T7JVxQIrUgOWtHdNDtPiywmFbiS12VjotIXLrKM3orQ==, registry: https://r.cnpmjs.org/, tarball: https://r2.cnpmjs.org/cookie-signature/-/cookie-signature-1.0.6.tgz}
     name: cookie-signature
     version: 1.0.6
     dev: false
-
-  r2.cnpmjs.org/cookie@0.0.5:
-    resolution: {integrity: sha512-STLsAHdtBDF5GJiPHc4sdfX5qzri6bcSxdSlW/o4IYJAA5yZxh3ZZsvctsKRNbhpP328sN+A2EjOF9vcW/LhdQ==, registry: https://r.cnpmjs.org/, tarball: https://r2.cnpmjs.org/cookie/-/cookie-0.0.5.tgz}
-    name: cookie
-    version: 0.0.5
-    dev: true
 
   r2.cnpmjs.org/debug@0.8.1:
     resolution: {integrity: sha512-HlXEJm99YsRjLJ8xmuz0Lq8YUwrv7hAJkTEr6/Em3sUlSUNl0UdFA+1SrY4fnykeq1FVkUEUtwRGHs9VvlYbGA==, registry: https://r.cnpmjs.org/, tarball: https://r2.cnpmjs.org/debug/-/debug-0.8.1.tgz}

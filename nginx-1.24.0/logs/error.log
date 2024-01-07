@@ -7,3 +7,20 @@
 2024/01/06 22:21:20 [notice] 18012#17388: signal process started
 2024/01/06 22:22:34 [notice] 14764#13840: signal process started
 2024/01/06 22:22:34 [error] 14764#13840: CreateFile() "F:\github\micro-framework\nginx-1.24.0/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2024/01/06 22:52:22 [emerg] 2148#3632: cannot load certificate "F:/micro.com+4.pem": BIO_new_file() failed (SSL: error:02001002:system library:fopen:No such file or directory:fopen('F:/micro.com+4.pem','r') error:2006D080:BIO routines:BIO_new_file:no such file)
+2024/01/06 22:52:26 [emerg] 16600#18128: cannot load certificate "F:/micro.com+4.pem": BIO_new_file() failed (SSL: error:02001002:system library:fopen:No such file or directory:fopen('F:/micro.com+4.pem','r') error:2006D080:BIO routines:BIO_new_file:no such file)
+2024/01/06 22:52:45 [emerg] 10048#18208: cannot load certificate "F:/micro.com+4.pem": BIO_new_file() failed (SSL: error:02001002:system library:fopen:No such file or directory:fopen('F:/micro.com+4.pem','r') error:2006D080:BIO routines:BIO_new_file:no such file)
+2024/01/06 22:53:08 [emerg] 13468#18312: cannot load certificate "F:/micro.com+4.pem": BIO_new_file() failed (SSL: error:02001002:system library:fopen:No such file or directory:fopen('F:/micro.com+4.pem','r') error:2006D080:BIO routines:BIO_new_file:no such file)
+2024/01/06 22:55:32 [emerg] 13072#8372: cannot load certificate "F:/micro.com+4.pem": BIO_new_file() failed (SSL: error:02001002:system library:fopen:No such file or directory:fopen('F:/micro.com+4.pem','r') error:2006D080:BIO routines:BIO_new_file:no such file)
+2024/01/06 23:01:01 [notice] 10732#17516: signal process started
+2024/01/06 23:02:08 [notice] 5756#10936: signal process started
+2024/01/06 23:08:09 [notice] 17088#5616: signal process started
+2024/01/06 23:08:09 [error] 17088#5616: CreateFile() "F:\github\micro-framework\nginx-1.24.0/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2024/01/06 23:16:01 [error] 18376#16872: *5 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 192.168.31.111, server: localhost, request: "GET / HTTP/1.1", upstream: "http://192.168.31.111:3002/", host: "jeek.com:4002"
+2024/01/06 23:16:03 [error] 18376#16872: *5 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 192.168.31.111, server: localhost, request: "GET /favicon.ico HTTP/1.1", upstream: "http://192.168.31.111:3002/favicon.ico", host: "jeek.com:4002", referrer: "https://jeek.com:4002/"
+2024/01/07 17:55:26 [notice] 19516#18964: signal process started
+2024/01/07 17:55:43 [emerg] 14500#19128: cannot load certificate "F:\github\micro-framework\nginx-1.24.0/conf/../jeek.com+3.pem": BIO_new_file() failed (SSL: error:02001002:system library:fopen:No such file or directory:fopen('F:\github\micro-framework\nginx-1.24.0/conf/../jeek.com+3.pem','r') error:2006D080:BIO routines:BIO_new_file:no such file)
+2024/01/07 17:57:41 [notice] 11160#8796: signal process started
+2024/01/07 18:15:36 [notice] 4960#6664: signal process started
+2024/01/07 18:26:58 [error] 14308#10180: *60 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 192.168.31.111, server: localhost, request: "GET / HTTP/1.1", upstream: "http://192.168.31.111:3001/", host: "jeek123.com:4001"
+2024/01/07 18:27:04 [error] 14308#10180: *60 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 192.168.31.111, server: localhost, request: "GET / HTTP/1.1", upstream: "http://192.168.31.111:3001/", host: "jeek123.com:4001"
