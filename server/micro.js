@@ -3,6 +3,7 @@ import express from "express";
 import morgan from "morgan";
 import path from "path";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 import config from "./config.js";
 
@@ -15,16 +16,28 @@ app.use(morgan("dev"));
 // cookie 中间件
 app.use(cookieParser());
 
+// https://www.npmjs.com/package/cors
+const corsOptions = {
+  origin: ["https://jeek123.com:4001", 'http://192.168.31.111:3001'],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  credentials: true,
+  // allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
+
 app.use((req, res, next) => {
   // 跨域请求中涉及到 Cookie 信息传递，值不能为 *，必须是具体的地址信息
   // 跨域白名单配置为主应用的 Nginx 代理地址
-  res.header("Access-Control-Allow-Origin", `https://jeek123.com:4001`);
+  // res.header("Access-Control-Allow-Origin", `https://jeek123.com:4001`);
+
   // CORS error: Cannot use wildcard in Access-Control-Allow-Origin when credentials flag is true
   // res.header("Access-Control-Allow-Origin", `*`);
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.header("Allow", "GET, POST, OPTIONS");
-  // 允许客户端发送跨域请求时携带 Cookie
-  res.header("Access-Control-Allow-Credentials", "true");
+
+  // res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  // res.header("Allow", "GET, POST, OPTIONS");
+  // // 允许客户端发送跨域请求时携带 Cookie
+  // res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
 
