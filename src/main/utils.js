@@ -1,138 +1,191 @@
-// 微应用工具类
-class UtilsManager {
-  constructor() {
+// 隔离类
+class MicroAppSandbox {
+  // 沙箱配置信息
+  options = null;
+  // iframe 实例
+  iframe = null;
+  // iframe 的 Window 实例
+  iframeWindow = null;
+  // 是否执行过 JS
+  exec = false;
+
+  constructor(options) {
+    this.options = options;
+    // 创建 iframe 时浏览器会创建新的全局执行上下文，用于隔离主应用的全局执行上下文
+    this.iframe = this.createIframe();
+    this.iframeWindow = this.iframe.contentWindow;
   }
 
-  // API 接口管理
-  getMicroApps() {
-    return window
-      .fetch("/micro-apps", {
-        method: "post",
-      })
-      .then((res) => res.json())
-      .catch((err) => {
-        console.error(err);
-      });
+  createIframe() {
+    const {rootElm, id, url} = this.options;
+    const iframe = window.document.createElement("iframe");
+    // 创建一个空白的 iframe
+    const attrs = {
+      src: "about:blank",
+      "app-id": id,
+      "app-src": url,
+      style: "border:none;width:100%;height:100%;",
+    };
+    Object.keys(attrs).forEach((name) => {
+      iframe.setAttribute(name, attrs[name]);
+    });
+    rootElm?.appendChild(iframe);
+    return iframe;
   }
 
-  isSupportPrefetch() {
-    const link = document.createElement("link");
-    const relList = link?.relList;
-    return relList && relList.supports && relList.supports("prefetch");
+  // 激活
+  active() {
+    this.iframe.style.display = "block";
+    // 如果已经通过 Script 加载并执行过 JS，则无需重新加载处理
+    if (this.exec) return;
+    this.exec = true;
+    const scriptElement = this.iframeWindow.document.createElement('script');
+    scriptElement.textContent = this.options.scriptText;
+    this.iframeWindow.document.head.appendChild(scriptElement);
   }
 
-  // 预请求资源，注意此种情况下不会执行 JS
-  prefetchStatic(href, as) {
-    // prefetch 浏览器支持检测
-    if (!this.isSupportPrefetch()) {
-      return;
+  // 失活
+  // INFO: JS 加载以后无法通过移除 Script 标签去除执行状态
+  // INFO: 因此这里不是指代失活 JS，如果是真正想要失活 JS，需要销毁 iframe 后重新加载 Script
+  inactive() {
+    this.iframe.style.display = "none";
+  }
+
+  // 销毁沙箱
+  destroy() {
+    this.options = null;
+    this.exec = false;
+    if (this.iframe) {
+      this.iframe.parentNode?.removeChild(this.iframe);
     }
-    const $link = document.createElement("link");
-    $link.rel = "prefetch";
-    $link.as = as;
-    $link.href = href;
-    document.head.appendChild($link);
-  }
-
-  // 请求 & 执行 JS
-  loadScript({script, id}) {
-    console.log('[loadScript]', {script, id})
-    return new Promise((resolve, reject) => {
-      const $script = document.createElement("script");
-      $script.src = script;
-      $script.setAttribute("micro-script", id);
-      $script.onload = resolve;
-      $script.onerror = reject;
-      document.body.appendChild($script);
-    });
-  }
-
-  loadStyle({style, id}) {
-    console.log('[loadStyle]', {style, id})
-    return new Promise((resolve, reject) => {
-      const $style = document.createElement("link");
-      $style.href = style;
-      $style.setAttribute("micro-style", id);
-      $style.rel = "stylesheet";
-      $style.onload = resolve;
-      $style.onerror = reject;
-      document.body.appendChild($style);
-    });
-  }
-
-  // 为什么需要删除 CSS 样式？不删除会有什么后果吗？
-  // 为什么没有删除 JS 文件的逻辑呢？
-  removeStyle({id}) {
-    const $style = document.querySelector(`[micro-style=${id}]`);
-    $style && $style?.parentNode?.removeChild($style);
-  }
-
-  // 测试用
-  removeScript({id, mount}) {
-    const $script = document.querySelector(`[micro-script=${id}]`);
-    $script && $script?.parentNode?.removeChild($script);
-    delete window?.[mount]
-  }
-
-  hasLoadScript({id}) {
-    const $script = document.querySelector(`[micro-script=${id}]`);
-    return !!$script;
-  }
-
-  hasLoadStyle({id}) {
-    const $style = document.querySelector(`[micro-style=${id}]`);
-    return !!$style;
+    this.iframe = null;
   }
 }
 
 // 微应用管理
-export default class MicroAppManager extends UtilsManager {
+class MicroApp {
+  // 缓存微应用的脚本文本（这里假设只有一个执行脚本）
+  scriptText = "";
+  // 隔离实例
+  sandbox = null;
+  // 微应用挂载的根节点
+  rootElm = null;
+
+  constructor(rootElm, app) {
+    this.rootElm = rootElm;
+    this.app = app;
+  }
+
+  // 获取 JS 文本（微应用服务需要支持跨域请求获取 JS 文件）
+  async fetchScript(src) {
+    try {
+      const res = await window.fetch(src);
+      return await res.text();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // 激活
+  async active() {
+    // 缓存资源处理
+    if (!this.scriptText) {
+      this.scriptText = await this.fetchScript(this.app.script);
+    }
+
+    // 如果没有创建沙箱，则实时创建
+    // 需要注意只给激活的微应用创建 iframe 沙箱，因为创建 iframe 会产生内存损耗
+    if (!this.sandbox) {
+      this.sandbox = new MicroAppSandbox({
+        rootElm: this.rootElm,
+        scriptText: this.scriptText,
+        url: this.app.script,
+        id: this.app.id,
+      });
+    }
+
+    this.sandbox.active();
+  }
+
+  // 失活
+  inactive() {
+    this.sandbox?.inactive();
+  }
+}
+
+// 微前端管理
+class MicroApps {
+  // 微应用实例映射表
+  appsMap = new Map();
+  // 微应用挂载的根节点信息
+  rootElm = null;
+
+  constructor(rootElm, apps) {
+    this.rootElm = rootElm;
+    this.setAppMaps(apps);
+  }
+
+  setAppMaps(apps) {
+    apps.forEach((app) => {
+      this.appsMap.set(app.id, new MicroApp(this.rootElm, app));
+    });
+  }
+
+  // TODO: prefetch 微应用
+  prefetchApps() {
+  }
+
+  // 激活微应用
+  activeApp(id) {
+    const app = this.appsMap.get(id);
+    app?.active();
+  }
+
+  // 失活微应用
+  inactiveApp(id) {
+    const app = this.appsMap.get(id);
+    app?.inactive();
+  }
+}
+
+// 主应用管理
+export default class MainApp {
   microApps = [];
+  microAppsManager = null;
 
   constructor() {
-    super();
     this.init();
-    console.log('[MicroAppManager init]')
   }
 
   async init() {
-    // 1.获取微应用列表
-    await this.processMicroApps();
-    // 2.导航跳转事件代理
+    this.microApps = await this.fetchMicroApps();
+    this.createNav();
     this.navClickListener();
-    // 3.监听hash变化，切换不同的微应用
     this.hashChangeListener();
-  }
-
-  async refresh() {
-    const hash = window.location.hash
-    const micro = this.microApps.find(d => hash.includes(d.id))
-    micro && await this.installMicro(micro)
-  }
-
-  processMicroApps() {
-    this.getMicroApps().then((res) => {
-      this.microApps = res;
-      this.prefetchMicroAppStatic();
-      this.createMicroAppNav();
-      this.refresh()
-    });
-  }
-
-  prefetchMicroAppStatic() {
-    const prefetchMicroApps = this.microApps?.filter(
-      (microApp) => microApp.prefetch
+    // 创建微前端管理实例
+    this.microAppsManager = new MicroApps(
+      document.getElementById("micro-app-slot"),
+      this.microApps
     );
-    prefetchMicroApps?.forEach((microApp) => {
-      microApp.script && this.prefetchStatic(microApp.script, "script");
-      microApp.style && this.prefetchStatic(microApp.style, "style");
-    });
   }
 
-  createMicroAppNav(microApps) {
+  // 从主应用服务器获请求微应用列表信息
+  async fetchMicroApps() {
+    try {
+      const res = await window.fetch("/micro-apps", {
+        method: "post",
+      });
+      return await res.json();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // 根据微应用列表创建主导航
+  createNav(microApps) {
     const fragment = new DocumentFragment();
     this.microApps?.forEach((microApp, index) => {
-      // TODO: APP 数据规范检测 (例如是否有 script、mount、unmount 等）
+      // TODO: APP 数据规范检测 (例如是否有 script）
       const button = document.createElement("button");
       button.textContent = microApp.name;
       button.id = microApp.id;
@@ -143,6 +196,7 @@ export default class MicroAppManager extends UtilsManager {
     nav.appendChild(fragment);
   }
 
+  // 导航点击的监听事件
   navClickListener() {
     const nav = document.getElementById("nav");
     nav.addEventListener("click", (e) => {
@@ -152,72 +206,15 @@ export default class MicroAppManager extends UtilsManager {
     });
   }
 
+  // hash 路由变化的监听事件
   hashChangeListener() {
-    // 监听 Hash 路由的变化，切换微应用
-    // 这里设定一个时刻只能切换一个微应用
+    // 监听 Hash 路由的变化，切换微应用（这里设定一个时刻只能切换一个微应用）
     window.addEventListener("hashchange", () => {
-      this.microApps?.forEach(async (microApp) => {
-        // 匹配需要激活的微应用
-        if (microApp.id === window.location.hash.replace("#", "")) {
-          console.time(`fetch microapp [${microApp.name}] static`);
-          await this.installMicro(microApp)
-          console.timeEnd(`fetch microapp [${microApp.name}] static`);
-          // 如果存在卸载 API 则进行应用卸载处理
-        } else {
-          this.uninstallMicro(microApp)
-        }
+      this.microApps?.forEach(async ({id}) => {
+        id === window.location.hash.replace("#", "")
+          ? this.microAppsManager.activeApp(id)
+          : this.microAppsManager.inactiveApp(id);
       });
     });
-  }
-
-  uninstallMicro(microApp) {
-    this.removeStyle(microApp);
-
-    // 动态 Script 方案
-    // window?.[microApp.unmount]?.();
-
-    // Web Components 方案
-    const $webcomponent = document.querySelector(
-        `[micro-id=${microApp.id}]`
-    );
-    // Web Components 方案
-    // 如果已经添加了自定义元素，则隐藏自定义元素
-    if ($webcomponent) {
-      $webcomponent.style.display = "none";
-    }
-  }
-  async installMicro(microApp) {
-    // 加载 CSS 样式
-    microApp?.style &&
-    !this.hasLoadStyle(microApp) &&
-    (await this.loadStyle(microApp));
-    // 加载 Script 标签
-    microApp?.script &&
-    !this.hasLoadScript(microApp) &&
-    (await this.loadScript(microApp));
-
-    // 动态 Script 方案
-    // window?.[microApp.mount]?.("#micro-app-slot");
-
-    // Web Components 方案
-    // 微应用的插槽
-    const $slot = document.getElementById("micro-app-slot");
-    const $webcomponent = document.querySelector(
-        `[micro-id=${microApp.id}]`
-    );
-    // Web Components 方案
-    // 如果没有在 DOM 中添加自定义元素，则先添加处理
-    if (!$webcomponent) {
-      // Web Components 方案
-      // 自定义元素的标签是微应用先定义出来的，然后在服务端的接口里通过 customElement 属性进行约定
-      const $webcomponent = document.createElement(
-          microApp.customElement
-      );
-      $webcomponent.setAttribute("micro-id", microApp.id);
-      $slot.appendChild($webcomponent);
-      // 如果已经存在自定义元素，则进行显示处理
-    } else {
-      $webcomponent.style.display = "block";
-    }
   }
 }

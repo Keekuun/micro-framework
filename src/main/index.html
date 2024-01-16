@@ -19,7 +19,7 @@
 <body>
 <h1>Main app</h1>
 <!-- 主应用的样式会被微应用覆盖 -->
-<h2>Hello，Web Components</h2>
+<h2>Hello，iframe blank sandbox</h2>
 <!-- 主导航设计，这里可以根据后端数据动态渲染导航 -->
 <div id="nav"></div>
 <!-- 内容区设计 -->
@@ -40,9 +40,9 @@
 
 <!-- 根据路由切换微应用 -->
 <script type="module">
-  import MicroAppManager from 'micro-utils'
+  import MainApp from 'micro-utils'
 
-  new MicroAppManager();
+  new MainApp();
 </script>
 </body>
 </html>

@@ -37,11 +37,9 @@ app.post("/micro-apps", function (req, res) {
       script: `http://${host}:${port.micro}/micro1/index.js`,
       style: `http://${host}:${port.micro}/micro1/index.css`,
       // // 挂载到 window 上的启动函数 window.micro1_mount
-      // mount: "micro1_mount",
+      mount: "micro1_mount",
       // 挂载到 window 上的启动函数 window.micro1_unmount
-      // unmount: "micro1_unmount",
-      // 自定义元素名称
-      customElement: 'micro-app-1',
+      unmount: "micro1_unmount",
       prefetch: true,
     },
     {
@@ -49,10 +47,8 @@ app.post("/micro-apps", function (req, res) {
       id: "micro2",
       script: `http://${host}:${port.micro}/micro2/index.js`,
       style: `http://${host}:${port.micro}/micro2/index.css`,
-      // mount: "micro2_mount",
-      // unmount: "micro2_unmount",
-      // 自定义元素名称
-      customElement: 'micro-app-2',
+      mount: "micro2_mount",
+      unmount: "micro2_unmount",
       prefetch: true,
     },
   ]);
